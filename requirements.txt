@@ -1,0 +1,12 @@
+certifi==2018.8.24
+chardet==3.0.4
+Django==1.9
+get==1.0.3
+idna==2.7
+pkg-resources==0.0.0
+post==1.0.2
+public==1.0.3
+query-string==1.0.2
+request==1.0.2
+requests==2.19.1
+urllib3==1.23

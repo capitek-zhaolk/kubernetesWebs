@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+
+{% block title %}首信云容器管理系统 -- 首页{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{% static 'css/create.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/layer/skin/default/layer.css' %}">
+{% endblock %}
+
+{% block headerLines %}概览{% endblock %}
+
+{% block newBtns %}{% endblock %}
+
+{% block newBtnsLinkMess %}
+<div class="new_btns_link_mess" style="top: 0px !important;">
+    <div class="margin-areas-main">
+        <div class="manage-area-main-inner">
+            <div class="show-panel">
+                <div class="blank-page">
+                    <div class="text-argin">
+                        <h2>欢迎使用首信云容器服务</h2>
+                        <div class="guide-steps">
+                            <ul class="clearFix">
+                                <li class="border-li">
+                                    <div class="">
+                                        <h5><i class="fa fa-info-circle"></i>创建集群</h5>
+                                    </div>
+                                    <p>
+                                        可通过控制台创建集群
+                                    </p>
+                                </li>
+                                <li class="border-li">
+                                    <div class="">
+                                        <h5><i class="fa fa-info-circle"></i>上传容器镜像</h5>
+                                    </div>
+                                    <p>
+                                        可通过控制台，上传镜像到仓库
+                                    </p>
+                                </li>
+                                <li class="border-li">
+                                    <div class="">
+                                        <h5><i class="fa fa-info-circle"></i>创建服务</h5>
+                                    </div>
+                                    <p>
+                                        可通过控制台，进行服务的创建
+                                    </p>
+                                </li>
+                                <li>
+                                    <div class="">
+                                        <h5><i class="fa fa-info-circle"></i>访问服务</h5>
+                                    </div>
+                                    <p>
+                                        通过控制台的访问入口访问服务
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="create-btns">
+                        <button id="create_pods" class="create_pods" title="创建应用">创建应用</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{#{% block content_main %}#}
+{#<div class="aside-right">#}
+{#    <div class="all-areas">#}
+{#        <div class="margin-areas-titles">#}
+{#            <h2>概览</h2>#}
+{#        </div>#}
+{#        <div class="margin-areas-main">#}
+{#            <div class="manage-area-main-inner">#}
+{#                <div class="show-panel">#}
+{#                    <div class="blank-page">#}
+{#                        <div class="text-argin">#}
+{#                            <h2>欢迎使用首信云容器服务</h2>#}
+{#                            <div class="guide-steps">#}
+{#                                <ul class="clearFix">#}
+{#                                    <li class="border-li">#}
+{#                                        <div class="">#}
+{#                                            <h5><i class="fa fa-info-circle"></i>创建集群</h5>#}
+{#                                        </div>#}
+{#                                        <p>#}
+{#                                            可通过控制台创建集群#}
+{#                                        </p>#}
+{#                                    </li>#}
+{#                                    <li class="border-li">#}
+{#                                        <div class="">#}
+{#                                            <h5><i class="fa fa-info-circle"></i>上传容器镜像</h5>#}
+{#                                        </div>#}
+{#                                        <p>#}
+{#                                            可通过控制台，上传镜像到仓库#}
+{#                                        </p>#}
+{#                                    </li>#}
+{#                                    <li class="border-li">#}
+{#                                        <div class="">#}
+{#                                            <h5><i class="fa fa-info-circle"></i>创建服务</h5>#}
+{#                                        </div>#}
+{#                                        <p>#}
+{#                                            可通过控制台，进行服务的创建#}
+{#                                        </p>#}
+{#                                    </li>#}
+{#                                    <li>#}
+{#                                        <div class="">#}
+{#                                            <h5><i class="fa fa-info-circle"></i>访问服务</h5>#}
+{#                                        </div>#}
+{#                                        <p>#}
+{#                                            通过控制台的访问入口访问服务#}
+{#                                        </p>#}
+{#                                    </li>#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="create-btns">#}
+{#                            <button id="create_pods" class="create_pods" title="创建应用">创建应用</button>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#{% endblock %}#}
+
+{% block other_cluster_js %}
+{#    <script>#}
+{#        $("#create_pods").click(function(){#}
+{#            layer.open({#}
+{#                title: ['创建应用','background-color: #abcdrf;text-align:center;font-size:18px;'],#}
+{#                type: 1,#}
+{#                content: $('.create_areas_main'),#}
+{#                btnAlign: "c",#}
+{#                closeBtn: 1,#}
+{#                shade: 0.05,#}
+{#                anim: 1,#}
+{#                resize:false,#}
+{#                fixed: true,//鼠标滚动时，模态框一直处在可视区#}
+{#                area: ['648px', '498px'],#}
+{#            });#}
+{#        });#}
+{##}
+{#        function login() {#}
+{#            var email = $.trim($("#user_management_email").val());#}
+{#            if (email !== null && email !== ""){#}
+{#                var params = {email: email};#}
+{#                $.ajax({#}
+{#                    type:'post',#}
+{#                    url: '/transit/admin/usermngt/create_user_form/',#}
+{#                    async: true,#}
+{#                    data: params,#}
+{#                    dataType: 'json',#}
+{#                    success: function(data){#}
+{#                        console.log(data.code);#}
+{#                        if (data.code === 0) {#}
+{#                            layer.msg('用户创建成功！', {title:'提示', icon:6});#}
+{#                            setTimeout('window.parent.location.reload()',3000);#}
+{#                        }else{#}
+{#                            layer.msg(data.msg, {title:'提示', icon:5});#}
+{#                        }#}
+{#                    },#}
+{#                })#}
+{#                layer.closeAll();#}
+{#            }else{#}
+{#                layer.closeAll();#}
+{#                layer.msg('邮箱不能为空，请输入邮箱名!', {title:'提示', icon:5, time:2000});#}
+{#            }#}
+{##}
+{#        }#}
+{#    </script>#}
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+
+{% block title %}首信云容器管理系统 -- 应用{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{% static 'plugins/layer/skin/default/layer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create.css' %}">
+{% endblock %}
+
+{% block headerLines %}应用{% endblock %}
+{% block newBtns %}
+<div class="new_btns">
+    <div class="col-sm-12">
+        <!--级联菜单 Start-->
+        <div class="bootstrap-table">
+
+            <!-- 创建用户信息显示 start-->
+            <div class="bootstrap-table">
+                <div class="fixed-table-toolbar">
+                    <div class="bs-bars pull-left">
+                        <div id="toolbar">
+                            <button id="createPods" type="button" class="btn btn-primary">创建</button>
+                            <button id="delCvm" type="button" class="btn btn-primary">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 创建用户信息显示 end-->
+        </div>
+        <div class="create-conn-btns" style="display: none;">
+            <!-- 创建用户按钮弹出框内容 start-->
+            <form id="createInstanceForm" class="applicationFormStyle form-horizontal" action="">
+
+                <!-- 镜像 Start-->
+                <div class="form-group">
+                    <label class="application_title">镜像名称：</label>
+                    <div class="application_main clearFix">
+                        <select name="" id="">
+                            <option>--请选选择镜像名称--</option>
+                            {% for k_, v_ in imageNames.items %}
+                                <option value="{{ v_ }}">{{ k_ }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <!-- 镜像 End-->
+
+                <!-- 应用 Start-->
+                <div class="form-group">
+                    <label class="application_title">应用名称：</label>
+                    <div class="application_main clearFix">
+                        <input type="text" name="" value="" placeholder="请输入应用名称">
+                    </div>
+                </div>
+                <!-- 应用 End-->
+
+                <!-- 型号 Start-->
+                <div class="form-group">
+                    <label class="application_title">应用型号：</label>
+                    <div class="application_main clearFix">
+                        <div class="btn-group btn_group_style" data-toggle="buttons">
+                            <label class="btn btn-default">
+                                <input type="radio" name="options" id="option1"> 100M 50M
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="options" id="option2"> 100M 64M
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="options" id="option3"> 100M 100M
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="options" id="option3"> 200M 128M
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数量 Start-->
+                <div class="form-group">
+                    <label class="application_title">创建数量：</label>
+                    <div class="application_main clearFix">
+                        <input type="number" name="" value="" placeholder="请输入创建应用数量">
+                    </div>
+                </div>
+
+                <!-- 项目组 Start-->
+                <div class="form-group">
+                    <label class="application_title">项目组：</label>
+                    <div class="application_main clearFix">
+                        <input type="text" name="" value="" placeholder="请输入项目组名称">
+                    </div>
+                </div>
+
+                <!-- 端口号 Start-->
+                <div class="form-group">
+                    <label class="application_title">端口号：</label>
+                    <div class="application_main clearFix">
+                        <input type="text" name="" value="" placeholder="请输入服务的端口号" style="width: 40%;float: left;">
+                        <i style="display: inline-block;height: 100%;padding: 0px 10px;float: left;">--</i>
+                        <input type="text" name="" value="" placeholder="请输入容器的端口号" style="width: 40%;float: left;">
+                    </div>
+                </div>
+                <div class="login-item">
+                    <a class="center-block" href="javascript:void(0);">确认</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block newBtnsLinkMess %}
+    <div class="new_btns_link_mess">
+        <table class="table table-hover striped table-striped" id="tb_departments" data-toolbar="#toolbar">
+            <thead>
+                <tr>
+                    <th class="border_right_color">应用名称</th>
+                    <th class="border_right_color">部署状态</th>
+                    <th class="border_right_color">服务状态</th>
+                    <th class="border_right_color">创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for k, v in list.items %}
+
+                {% if k == "error" %}
+                <tr>
+                    <td colspan="5">啥玩意都没有</td>
+                </tr>
+
+                {% else %}
+                <tr>
+                    <td class="border_right_color">
+                        <a href="/application/detail/?namespace={{ k }}" target="_self">{{ v.name }}</a>
+                    </td>
+                    <td class="border_right_color">{{ v.b }}</td>
+                    <td class="border_right_color">{{ v.y }}</td>
+                    <td class="border_right_color">{{ v.times }}</td>
+                    <td></td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block other_cluster_js %}
+<script>
+    $("#createPods").click(function(){
+        layer.open({
+            title: ['创建新应用','background-color: #000;text-align:center;font-size:18px;'],
+            type: 1,
+            content: $('.create-conn-btns'),
+            btnAlign: "c",
+            closeBtn: 1,
+            shade: 0.05,
+            anim: 1,
+            resize:false,
+            fixed: true,
+            area: ['600px', 'auto'],
+            cancel: function () {
+                layer.msg("已取消创建命令", {time:3000, icon:5})
+            }
+        });
+    });
+</script>
+{% endblock %}

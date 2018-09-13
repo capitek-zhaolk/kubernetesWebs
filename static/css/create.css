@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+
+/*.create_delete{*/
+    /*padding:10px 0px;*/
+    /*-webkit-box-sizing: border-box;*/
+    /*-moz-box-sizing: border-box;*/
+    /*box-sizing: border-box;*/
+    /*line-height: 34px;*/
+/*}*/
+
+body .layui-layer.layui-layer-page.layer-anim-01 .layui-layer-title{
+    background-color: rgb(52, 122, 183) !important;
+}
+
+.applicationFormStyle{
+    width:90%;
+    margin:0 auto;
+    padding:10px 0px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.applicationFormStyle .form-group{
+    font-size: 14px;
+    width:100%;
+    margin:0 auto 20px auto;
+    /*background-color: #eeeeee;*/
+    height: 32px;
+}
+.applicationFormStyle .form-group .application_title{
+    float: left;
+    width:20%;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 0px;
+}
+.applicationFormStyle .form-group .application_main{
+    float: left;
+    width:80%;
+    height: 32px;
+    line-height: 32px;
+}
+.applicationFormStyle .form-group .application_main select{
+    width:90%;
+    height: 30px;
+    color: #858585;
+}
+.applicationFormStyle .form-group .application_main select option{
+    text-indent: 6px;
+}
+
+.applicationFormStyle .form-group .application_main input{
+    width:90%;
+    height: 30px;
+    color: #858585;
+    text-indent: 6px;
+}
+.applicationFormStyle .form-group .application_main .btn-group.btn_group_style .btn{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.login-item{
+    padding:20px 0;
+}
+.login-item > a{
+    background-color:#5A97FF;
+    width:150px;
+    height:40px;
+    display:block;
+    text-align:center;
+    line-height:40px;
+    color:#fff;
+    font-size:20px;
+}

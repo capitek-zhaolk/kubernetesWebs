@@ -1,0 +1,281 @@
+{% load static %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+	<!-- Meta -->
+    {% block meta %}
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+    {% endblock %}
+
+
+	<!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+    {% block css %}
+	<!-- CSS Global Compulsory -->
+	<link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.css' %}">
+	<!-- CSS Header and Footer -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/header_.css' %}">
+	<!-- CSS Implementing Plugins -->
+	<!-- CSS Theme -->
+    {% endblock %}
+
+	<!-- CSS Customization -->
+    {% block extra_css %}
+	<link rel="stylesheet" href="{% static 'css/common.css' %}">
+	<link rel="stylesheet" href="{% static 'css/docker_.css' %}">
+    {% endblock %}
+
+    {% block other_css %}{% endblock %}
+
+</head>
+
+<body class="header_fixed header_fixed_space_50">
+	<div class="wrapper">
+		<!--Header Start-->
+        {% block header %}
+            <div class="header_v1 header_other_style">
+                <div class="navbar navbar-default navbar_style">
+                    <div class="container header_container">
+                        <div class="row">
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="menu-container">
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                    <div class="navbar-brand navbar_brand_style">
+                                        <a href="javascript:void(0);" title="">
+                                            <img src="{% static 'img/logo-splash.svg' %}" alt="首信云">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <ul class="topbar-list topbar-log_reg pull-right visible-sm-block visible-md-block visible-lg-block">
+                                    <li style="height: 100%;display: block;">
+                                        <a href="javascript:void(0);" title="">
+                                            <i class="fa fa-user fa-fw"></i>
+                                            爱新觉罗·玄烨
+                                            <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-right" role="menu">
+                                            <li>
+                                                <a href="">
+                                                    <i class="fa fa-sign-out fa-fw"></i>
+                                                    &nbsp;退出
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+{#            <div class="navbar navbar-default navbar-fixed-top">#}
+{#                <div class="container-fluid">#}
+{#                    <div class="row">#}
+{#                        <div class="col-sm-8 col-xs-12">#}
+{#                            <!-- Brand and toggle get grouped for better mobile display -->#}
+{#                            <div class="navbar-header" style="width: 100%;">#}
+{#                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">#}
+{#                                    <span class="sr-only"></span>#}
+{#                                    <span class="icon-bar"></span>#}
+{#                                    <span class="icon-bar"></span>#}
+{#                                    <span class="icon-bar"></span>#}
+{#                                </button>#}
+{#                                <!--Header Block Start-->#}
+{#                                <div class="navbar-brand header-block-logs">#}
+{#                                    <a href="javascript:void(0);" title="" style="font-size: 12px; color: #fff;">#}
+{#                                        <img src="{% static 'img/logo-splash.svg' %}" alt="首信云" class="img-responsive images_style">#}
+{#                                    </a>#}
+{#                                    <span class="img_mess">首信云容器系统</span>#}
+{#                                </div>#}
+{#                                <!--Header Block End-->#}
+{#                            </div>#}
+{##}
+{#                            <div class="collapse navbar-collapse navbar-responsive-collapse">#}
+{#                    </div>#}
+{##}
+{#                        </div>#}
+{#                        <div class="col-sm-4">#}
+{#                            <ul class="topbar-list topbar-log_reg pull-right visible-sm-block visible-md-block visible-lg-block">#}
+{#                                <li style="height: 100%;display: block;">#}
+{#                                    <a href="javascript:void(0);" title="">#}
+{#                                        <i class="fa fa-user fa-fw"></i>#}
+{#                                        爱新觉罗·玄烨#}
+{#                                        <span class="caret"></span>#}
+{#                                    </a>#}
+{#                                    <ul class="dropdown-right" role="menu">#}
+{#                                        <li>#}
+{#                                            <a href="">#}
+{#                                                <i class="fa fa-sign-out fa-fw"></i>#}
+{#                                                &nbsp;退出#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    </ul>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                </div>#}
+{#            </div>#}
+
+        <!--Header End-->
+        {% endblock %}
+		<!--Header End-->
+
+		<!--Contnet Start-->
+		<div class="content">
+
+			<!--内容区域-->
+            {% block content_main %}
+            <div class="admin_conn">
+
+                <!--LeftSider Start-->
+                {% block slider %}
+                <!--Contnet Start-->
+                <div class="aside aside-new" id="sidebar">
+                    <div class="aside-area">
+                        <div class="aside-area-main">
+                            <h2 class="aside-headline">容器服务</h2>
+                            <!--导航 开始-->
+                            <ul class="aside-list">
+                                <li class="clearFix aside-list-li active">
+                                    <a href="/index/" title="">
+                                        <img src="{% static 'img/svg/overview.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">概览</span>
+                                    </a>
+                                </li>
+                                <li class="aside-title">
+                                    <span>应用中心</span>
+                                </li>
+                                <li class="clearFix aside-list-li">
+                                    <a href="/colony/" target="_self">
+                                        <img src="{% static 'img/svg/colony.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">集群</span>
+                                    </a>
+                                </li>
+                                <li class="clearFix aside-list-li">
+                                    <a href="/application/" target="_self">
+                                        <img src="{% static 'img/svg/application.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">应用</span>
+                                    </a>
+                                </li>
+                                <li class="clearFix aside-list-li">
+                                    <a href="/service/" target="_self">
+                                        <img src="{% static 'img/svg/service.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">服务</span>
+                                    </a>
+                                </li>
+
+                                <li class="aside-title">
+                                    <span>交付中心</span>
+                                </li>
+                                <li class="clearFix images aside-list-li">
+                                    <a href="/images/" target="_self">
+                                        <img src="{% static 'img/svg/ware.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">镜像仓库</span>
+                                        <!--<i class="caret aside-li-a"></i>-->
+                                    </a>
+                                    <!--<ul class="my-images display-default-none">-->
+                                        <!--<li>-->
+                                            <!--<a href="" title="">-->
+                                                <!--<i class="fa fa-info-circle"></i>-->
+                                                <!--<span>我的镜像</span>-->
+                                            <!--</a>-->
+                                        <!--</li>-->
+                                    <!--</ul>-->
+                                </li>
+                                <li class="clearFix aside-list-li">
+                                    <a href="javascript:void(0);" target="_self">
+                                        <img src="{% static 'img/svg/configure.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">配置项</span>
+                                    </a>
+                                </li>
+
+                                <li class="aside-title">
+                                    <span>运维中心</span>
+                                </li>
+                                <li class="clearFix aside-list-li">
+                                    <a href="javascript:void(0);" target="_self" class="aside-list-li">
+                                        <img src="{% static 'img/svg/logs.svg' %}" alt="" class="aside-li-a">
+                                        <span class="aside-li-a">日志</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <!--导航 结束-->
+                        </div>
+
+                    </div>
+                </div>
+                <!--Contnet End-->
+                {% endblock %}
+                <!--LeftSider End-->
+
+                <div class="mess_conn">
+                    <div class="mess_header_main">
+                        <div class="header_lines">
+                            <h5>{% block headerLines %}{% endblock %}</h5>
+                        </div>
+                        <div class="main_lines">
+                            <div class="main_lines_in">
+                                {% block newBtns %}<div class="new_btns"></div>{% endblock %}
+                                {% block newBtnsLinkMess %}<div class="new_btns_link_mess"></div>{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+
+		</div>
+		<!--Contnet End-->
+
+        <!--otherContnet Start-->
+        {% block other_content %}{% endblock %}
+        <!--otherContnet End-->
+
+	</div>
+
+    {% block other_conn %}{% endblock %}
+<!-- Wait Block -->
+
+<!-- End Wait Block -->
+{% block plughins %}
+<!-- JS Global Compulsory -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/layer/skin/layer.js' %}"></script>
+{% endblock %}
+
+<!-- JS Page Level -->
+{% block extra_js %}
+<script src="{% static 'js/cluster.js' %}"></script>
+{% endblock %}
+
+{% block other_cluster_js %}{% endblock %}
+</body>
+
+
+</html>
