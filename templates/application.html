@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 {% load staticfiles %}
 
 {% block title %}首信云容器管理系统 -- 应用{% endblock %}
@@ -31,19 +30,20 @@
         </div>
         <div class="create-conn-btns" style="display: none;">
             <!-- 创建用户按钮弹出框内容 start-->
-            <form id="createInstanceForm" class="applicationFormStyle form-horizontal" action="">
-
+            <form id="createInstanceForm" class="applicationFormStyle form-horizontal" action="" method="post">
+                {% csrf_token %}
                 <!-- 镜像 Start-->
                 <div class="form-group">
                     <label class="application_title">镜像名称：</label>
                     <div class="application_main clearFix">
-                        <select name="" id="">
-                            <option>--请选选择镜像名称--</option>
+                        <select name="category" id="batch" name="batch">
+                            <option value="0">--请选选择镜像名称--</option>
                             {% for k_, v_ in imageNames.items %}
-                                <option value="{{ v_ }}">{{ k_ }}</option>
+                                <option value="{{ forloop.counter }}">{{ k_ }}</option>
                             {% endfor %}
                         </select>
                     </div>
+                <span class="images_error"></span>
                 </div>
                 <!-- 镜像 End-->
 
@@ -51,8 +51,9 @@
                 <div class="form-group">
                     <label class="application_title">应用名称：</label>
                     <div class="application_main clearFix">
-                        <input type="text" name="" value="" placeholder="请输入应用名称">
+                        <input class="application_name" type="text" name="application_name" value="" placeholder="应用名称可以包含字母数字下划线">
                     </div>
+                <span class="name_error"></span>
                 </div>
                 <!-- 应用 End-->
 
@@ -61,17 +62,17 @@
                     <label class="application_title">应用型号：</label>
                     <div class="application_main clearFix">
                         <div class="btn-group btn_group_style" data-toggle="buttons">
-                            <label class="btn btn-default">
-                                <input type="radio" name="options" id="option1"> 100M 50M
+                            <label class="btn btn-default active">
+                                <input type="radio" name="radio_" id="option1" value="1" checked> 100M 50M
                             </label>
                             <label class="btn btn-default">
-                                <input type="radio" name="options" id="option2"> 100M 64M
+                                <input type="radio" name="radio_" id="option2" value="2"> 100M 64M
                             </label>
                             <label class="btn btn-default">
-                                <input type="radio" name="options" id="option3"> 100M 100M
+                                <input type="radio" name="radio_" id="option3" value="3"> 100M 100M
                             </label>
                             <label class="btn btn-default">
-                                <input type="radio" name="options" id="option3"> 200M 128M
+                                <input type="radio" name="radio_" id="option3" value="4"> 200M 128M
                             </label>
                         </div>
                     </div>
@@ -81,29 +82,32 @@
                 <div class="form-group">
                     <label class="application_title">创建数量：</label>
                     <div class="application_main clearFix">
-                        <input type="number" name="" value="" placeholder="请输入创建应用数量">
+                        <input class="create_num" type="number" name="create_num" value="" placeholder="请输入创建应用数量">
                     </div>
+                <span class="num_error"></span>
                 </div>
 
                 <!-- 项目组 Start-->
                 <div class="form-group">
                     <label class="application_title">项目组：</label>
                     <div class="application_main clearFix">
-                        <input type="text" name="" value="" placeholder="请输入项目组名称">
+                        <input id="application_title" class="application_title" type="text" name="application_title" value="" placeholder="请输入项目组名称">
                     </div>
+                <span class="application_title_error"></span>
                 </div>
 
                 <!-- 端口号 Start-->
                 <div class="form-group">
                     <label class="application_title">端口号：</label>
                     <div class="application_main clearFix">
-                        <input type="text" name="" value="" placeholder="请输入服务的端口号" style="width: 40%;float: left;">
+                        <input class="service_port" type="number" name="service_port" value="" placeholder="请输入服务的端口号" style="width: 40%;float: left;">
                         <i style="display: inline-block;height: 100%;padding: 0px 10px;float: left;">--</i>
-                        <input type="text" name="" value="" placeholder="请输入容器的端口号" style="width: 40%;float: left;">
+                        <input class="pods_port" type="number" name="pods_port" value="" placeholder="请输入容器的端口号" style="width: 40%;float: left;">
                     </div>
+                <span class="ports_error"></span>
                 </div>
                 <div class="login-item">
-                    <a class="center-block" href="javascript:void(0);">确认</a>
+                    <a id="createConfirm" class="center-block" href="javascript:void(0);" onclick="createConfirm();">确认</a>
                 </div>
             </form>
         </div>
@@ -117,31 +121,34 @@
             <thead>
                 <tr>
                     <th class="border_right_color">应用名称</th>
+                    <th class="border_right_color">所属环境</th>
                     <th class="border_right_color">部署状态</th>
                     <th class="border_right_color">服务状态</th>
+                    <th class="border_right_color">IP地址</th>
                     <th class="border_right_color">创建时间</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-            {% for k, v in list.items %}
-
-                {% if k == "error" %}
-                <tr>
-                    <td colspan="5">啥玩意都没有</td>
-                </tr>
-
-                {% else %}
+            {% for foo in podslist.items %}
                 <tr>
                     <td class="border_right_color">
-                        <a href="/application/detail/?namespace={{ k }}" target="_self">{{ v.name }}</a>
+                        <a href="/application/detail/?namespace={{ foo.metadata.name }}" target="_self">{{ foo.metadata.name }}</a>
                     </td>
-                    <td class="border_right_color">{{ v.b }}</td>
-                    <td class="border_right_color">{{ v.y }}</td>
-                    <td class="border_right_color">{{ v.times }}</td>
+                    <td class="border_right_color">{{ foo.metadata.namespace }}</td>
+                    <td class="border_right_color">
+
+                        {{ foo.status.container_statuses.ready }}
+                    </td>
+                    <td class="border_right_color">
+                        {{ foo.status.phase}}
+                    </td>
+                    <td class="border_right_color">
+                        {{ foo.status.pod_ip}}
+                    </td>
+                    <td class="border_right_color">{{ foo.metadata.creation_timestamp }}</td>
                     <td></td>
                 </tr>
-                {% endif %}
             {% endfor %}
             </tbody>
         </table>
@@ -150,23 +157,119 @@
 {% endblock %}
 
 {% block other_cluster_js %}
+<script src="{% static 'plugins/layer/skin/layui.js' %}" type="text/javascript"></script>
+
 <script>
-    $("#createPods").click(function(){
-        layer.open({
-            title: ['创建新应用','background-color: #000;text-align:center;font-size:18px;'],
-            type: 1,
-            content: $('.create-conn-btns'),
-            btnAlign: "c",
-            closeBtn: 1,
-            shade: 0.05,
-            anim: 1,
-            resize:false,
-            fixed: true,
-            area: ['600px', 'auto'],
-            cancel: function () {
-                layer.msg("已取消创建命令", {time:3000, icon:5})
-            }
-        });
+
+function createConfirm() {
+    <!-- 镜像数据 -->
+    var $batch=$("#batch option:selected").text();
+    var $Index = $("#batch option:selected").val();
+    if ( $Index == 0 ){
+        $('.num_error').empty();
+        $('.images_error').html('数据不能为空');
+        return false;
+    }
+
+    <!-- 应用名称 -->
+    var $username = $('.application_name').val();
+    if( $username == '' ){
+        $('.name_error').empty();
+        $('.name_error').html('数据不能为空');
+        return false;
+    }
+
+
+    <!-- 应用型号 -->
+    var $radio = $("input[name='radio_']:checked").val();
+
+    <!-- 创建数量 -->
+    var $createNum = $('.create_num').val();
+    if ( $createNum < 0 || $createNum > 10 ){
+        $('.num_error').empty();
+        $('.num_error').html('副本数量保持在10以内');
+        return false;
+    }
+
+    <!-- 项目组 -->
+    var $applicationTitle = $('#application_title').val();
+    var regex = /^[0-9]+$/;
+    if ($applicationTitle == '' ) {
+        $('.application_title_error').empty();
+        $('.application_title_error').html('请输入项目组名称');
+        return false;
+    }else if( regex.test($applicationTitle) ){
+        $('.application_title_error').empty();
+        $('.application_title_error').html('项目组名称不能为纯数字');
+    }else if ( !isNaN($applicationTitle) ){
+        $('.application_title_error').empty();
+        $('.application_title_error').html('项目组名称不能为纯数字');
+    }
+
+    <!-- 端口号 -->
+    var $servicePort = $('.service_port').val();
+    var $podsPort = $('.pods_port').val();
+    if ($servicePort >99999 || $podsPort > 99999 || $servicePort < 0 || $podsPort < 0 ){
+        $('.ports_error').empty();
+        $('.ports_error').html('端口号限制在99999以内');
+    }
+
+    var json_msg = {'select':$batch, 'username':$username, 'radio':$radio, 'number':$createNum, 'titles':$applicationTitle, 'servicePort':$servicePort, 'podsPort':$podsPort};
+
+    return json_msg;
+
+}
+
+$("#createPods").click(function() {
+    layer.open({
+        title: ['创建新应用', 'background-color: #000;text-align:center;font-size:18px;'],
+        type: 2,
+        content: '/aa/',
+        btnAlign: "c",
+        closeBtn: 1,
+        shade: 0.05,
+        anim: 1,
+        resize: false,
+        fixed: true,
+        area: ['600px', '470px'],
+        btn: ['确认', '取消'],
+        yes: function (index, layero) {
+            var datas = {'name':'zhao', 'age':20};
+            $.ajax({
+               type: 'POST',
+                dataType:'json',
+                data:datas,
+                url: '/application/',
+                success: function (data) {
+                    layer.msg('用户创建成功！', {title:'提示', icon:6});
+                }
+            });
+            {#            var body = layer.getChildFrame('body', index);#}
+            {#            var iframeWin = window[layero.find('iframe')[0]['name']];#}
+
+            layer.close(index);
+
+        },
+        btn2: function () {
+            layer.msg("已取消创建命令", {time: 3000, icon: 5})
+        },
+        cancel: function () {
+            layer.msg("已取消创建命令", {time: 3000, icon: 5})
+        }
     });
+});
+
+
+
+
+
+
+<!-- 子界面的方法-->
+
+
+
+
 </script>
+
+
 {% endblock %}

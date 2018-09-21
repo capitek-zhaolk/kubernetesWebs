@@ -1,15 +1,6 @@
 @charset "UTF-8";
 
-
-/*.create_delete{*/
-    /*padding:10px 0px;*/
-    /*-webkit-box-sizing: border-box;*/
-    /*-moz-box-sizing: border-box;*/
-    /*box-sizing: border-box;*/
-    /*line-height: 34px;*/
-/*}*/
-
-body .layui-layer.layui-layer-page.layer-anim-01 .layui-layer-title{
+body .layui-layer.layui-layer-iframe.layer-anim-01 .layui-layer-title{
     background-color: rgb(52, 122, 183) !important;
 }
 
@@ -56,7 +47,6 @@ body .layui-layer.layui-layer-page.layer-anim-01 .layui-layer-title{
     width:90%;
     height: 30px;
     color: #858585;
-    text-indent: 6px;
 }
 .applicationFormStyle .form-group .application_main .btn-group.btn_group_style .btn{
     padding-bottom: 5px;
@@ -66,7 +56,7 @@ body .layui-layer.layui-layer-page.layer-anim-01 .layui-layer-title{
 .login-item{
     padding:20px 0;
 }
-.login-item > a{
+.login-item > input{
     background-color:#5A97FF;
     width:150px;
     height:40px;
@@ -75,4 +65,5 @@ body .layui-layer.layui-layer-page.layer-anim-01 .layui-layer-title{
     line-height:40px;
     color:#fff;
     font-size:20px;
+    border:none;
 }

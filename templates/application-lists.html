@@ -9,8 +9,10 @@
     <div class="new_btns">
     基本信息
         {% for k, v in detail_info.items %}
-            {% if k == 'name' %}
+            {% if k == 'k_name' %}
             <h5>{{ v }}</h5>
+            {% else %}
+                <p style="line-height: 30px">{{ v }}</p>
             {% endif %}
         {% endfor %}
     </div>
@@ -32,7 +34,7 @@
         </thead>
         <tbody>
             <tr>
-                <td></td>
+                <td>{{ ins.metadata.name }}</td>
                 <td></td>
                 <td></td>
                 <td></td>

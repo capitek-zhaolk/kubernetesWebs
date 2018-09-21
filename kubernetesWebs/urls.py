@@ -17,15 +17,23 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from k8sweb.views import index, images, services, application, colony, detail
+from k8sweb.views import index, images, services, application, colony, detail, aa, configure, jsonConfigure
 
 urlpatterns = [
-    # url(r'^', index),
+    url(r'^$', index),
     url(r'^index/$', index),
     url(r'^images/$', images),
     url(r'^service/$', services),
     url(r'^application/$', application),
     url(r'^application/detail/$', detail),
     url(r'^colony/$', colony),
+    url(r'^aa/$', aa),
+
+
+    url(r'^configure/$', configure),
+    url(r'^jsonConfigure/$', jsonConfigure),
+
+
+
 
 ]

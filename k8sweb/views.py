@@ -1,25 +1,41 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from django.shortcuts import render
-import time
+import time, sys
 # Create your views here.
 
 import requests
-import json
+try:
+    import simplejson as json
+except:
+    import json
 import traceback
-from django.shortcuts import render_to_response, render
-from kubernetesWebs.settings import REGISTERY_IP_ADDR, REGISTERY_IP_ADDR_PORT
+import paramiko, os
+from django.shortcuts import render_to_response, render, HttpResponse, redirect
+from kubernetesWebs.settings import REGISTERY_IP_ADDR, REGISTERY_IP_ADDR_PORT, K8SURL, K8SROOT, K8SPASSWORD, K8SREMOTEPATH, LOCALK8SREMOTEPATH
 
-USER_LISTS = {
-    "Kubernetes" : {'name':'Kubernetes', 'b':u'已部署', 'y':u'运行', 'times':time.time},
-    "admin" : {'name': "admin", 'b':u'已部署', 'y':u'运行', 'times':time.time},
-}
+from django.http import JsonResponse, HttpResponseRedirect
 
+from kubernetes import client, config
+
+from django import forms
+
+import subprocess
+
+from createyaml.views import replaces
 
 # Docker私有仓库服务器
 repo_ip = REGISTERY_IP_ADDR
 repo_port = REGISTERY_IP_ADDR_PORT
+
+
+# 获取Pods
+def getPodsList():
+    config.load_kube_config()
+    v1 = client.CoreV1Api()
+    print("Listing pods with their IPs:")
+    ret = v1.list_pod_for_all_namespaces(watch=False)
+    return ret
 
 # 获取私有仓库的镜像名称和版本号
 def getImagesName(repo_ip, repo_port):
@@ -58,16 +74,125 @@ def images(request):
     return render(request, 'myImages.html', {'images_data':data})
 
 def services(request):
+    # res = getPodsList()
+    # return render(request, 'services.html', {'res': res})
     return render(request, 'services.html')
 
 def application(request):
-    imageNames = getImagesName(repo_ip, repo_port)
-    return render(request, 'application.html', {'list':USER_LISTS, 'imageNames':imageNames})
+    podslist = getPodsList()
+
+    # print podslist
+
+    return render(request, 'application.html', {'podslist': podslist})
 
 def colony(request):
     return render(request, 'colony.html')
 
 def detail(request):
+    USER_LISTS = {}
+    USER_LISTS_VALUE = {}
+
+    podslist = getPodsList()
+
     namespace = request.GET.get('namespace')
+    for k in podslist.items:
+        k_name = k.metadata.name
+        USER_LISTS_VALUE['k_name'] = k.metadata.name
+        USER_LISTS_VALUE['start_time'] = k.status.start_time
+        USER_LISTS_VALUE['run_status'] = k.status.phase
+
+        USER_LISTS[k_name] = USER_LISTS_VALUE
+
+    # print '数据是{0}'.format(USER_LISTS)
+
     detail_info = USER_LISTS[namespace]
     return render(request, 'application-lists.html', {'detail_info': detail_info})
+
+
+# 点击创建Pods按钮，弹出创建层
+# 数据数据并把数据写入到后台
+def aa(request):
+    imageNames = getImagesName(repo_ip, repo_port)
+    return render(request, 'application-create.html', {'imageNames':imageNames})
+
+
+def configure(request):
+    imagesName = getImagesName(repo_ip, repo_port)
+    return render(request, 'configure.html', {'imageNames':imagesName})
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def jsonConfigure(request):
+    contexts = {}
+    new_dicts = {}
+    yaml_files = {}
+    new_list = []
+    new_ = []
+
+    global k_ , v_
+    if request.method == 'POST':
+        if request.is_ajax():
+            batch = request.POST.get('batch')
+            application_name = request.POST.get('application_name')
+            radio_ = request.POST.getlist('radio_')
+            create_num = request.POST.get('create_num')
+            application_title = request.POST.get('application_title')
+            service_port = request.POST.get('service_port')
+            pods_port = request.POST.get('pods_port')
+
+            application_names = '{0}:5000/{1}'.format(REGISTERY_IP_ADDR, batch)
+
+            for ins in range(len(radio_)):
+                if ins == 0:
+                    new_ = radio_[ins].split(' ')
+
+            for ins in range(len(new_)):
+                if ins == 0:
+                    k_ = 'cpu'
+                    v_ = new_[ins]
+                    yaml_files[k_] = v_
+                elif ins == 1:
+                    k_ = 'memory'
+                    v_ = new_[1]
+                    yaml_files[k_] = v_
+
+            # print '新的字典数据是{0}'.format(yaml_files)
+
+            # print '最后的地址是%s' % application_names
+
+            context = { 'application_name': application_name, 'application_names': application_names, 'create_num': create_num, 'application_title': application_title, 'service_port': service_port, 'pods_port':pods_port}
+
+            new_dicts = dict(context.items() + yaml_files.items())
+
+            print 'context数据是{0}'.format(context)
+
+            # 修改文件
+            replaces('/home/share/kubernetesWebs/utils/create_yaml.yaml', new_dicts)
+
+            contexts = {'mess': 'ok'}
+
+            return HttpResponse(json.dumps(contexts), content_type="application/json")
+
+    return render(request, 'configure.html')
+
+
+
+# 假如 K8S集群跟 项目不再一个服务器
+# 首先在K8S集群服务器获取相应的 ./kube/config 配置文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

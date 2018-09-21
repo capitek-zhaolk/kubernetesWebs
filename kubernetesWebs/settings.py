@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'k8sweb',
+    'createyaml',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -86,6 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+
 }
 
 
@@ -129,5 +131,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 # 私有仓库地址 端口号
-REGISTERY_IP_ADDR = "172.17.0.166"
+REGISTERY_IP_ADDR = "172.17.0.179"
 REGISTERY_IP_ADDR_PORT = 5000
+
+# Kubernetes集群地址
+K8SURL = '172.17.0.179'
+K8SROOT = 'root'
+K8SPASSWORD = '111'
+K8SREMOTEPATH = 'root/.kube/'
+LOCALK8SREMOTEPATH = 'root/.kube/'

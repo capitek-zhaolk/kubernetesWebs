@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}首信云容器管理系统 -- 创建应用{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{% static 'plugins/layer/skin/default/layer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create.css' %}">
+{% endblock %}
+
+{% block headerLines %}创建应用{% endblock %}
+
+{% block newBtns %}<div class="new_btns"></div>{% endblock %}
+
+{% block newBtnsLinkMess %}
+    <div class="new_btns_link_mess"  style="top: 10px;">
+
+    <div class="col-sm-12">
+
+        <div class="create-conn-btns">
+            <!-- 创建用户按钮弹出框内容 start-->
+            <form id="createInstanceForm" class="applicationFormStyle form-horizontal" action="" method="POST">
+                {% csrf_token %}
+                <!-- 镜像 Start-->
+                <div class="form-group">
+                    <label class="application_title">镜像名称：</label>
+                    <div class="application_main clearFix">
+                        <select name="category" id="batch" name="batch">
+                            <option value="0">--请选选择镜像名称--</option>
+                            {% for k_, v_ in imageNames.items %}
+                                <option value="{{ forloop.counter }}">{{ k_ }}:{{ v_ }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                <span class="images_error"></span>
+                </div>
+                <!-- 镜像 End-->
+
+                <!-- 应用 Start-->
+                <div class="form-group">
+                    <label class="application_title">应用名称：</label>
+                    <div class="application_main clearFix">
+                        <input class="application_name" type="text" name="application_name" value="" placeholder="应用名称可以包含字母数字下划线">
+                    </div>
+                <span class="name_error"></span>
+                </div>
+                <!-- 应用 End-->
+
+                <!-- 型号 Start-->
+                <div class="form-group">
+                    <label class="application_title">应用型号：</label>
+                    <div class="application_main clearFix">
+                        <div class="btn-group btn_group_style" data-toggle="buttons">
+                            <label class="btn btn-default active">
+                                <input type="radio" name="radio_" id="option1" value="100M 50M" checked> 100M 50M
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="radio_" id="option2" value="100M 64M"> 100M 64M
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="radio_" id="option3" value="100M 100M"> 100M 100M
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="radio_" id="option3" value="200M 128M"> 200M 128M
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数量 Start-->
+                <div class="form-group">
+                    <label class="application_title">创建数量：</label>
+                    <div class="application_main clearFix">
+                        <input class="create_num" type="text" name="create_num" value="" placeholder="请输入创建应用数量">
+                    </div>
+                <span class="num_error"></span>
+                </div>
+
+                <!-- 项目组 Start-->
+                <div class="form-group">
+                    <label class="application_title">命名空间：</label>
+                    <div class="application_main clearFix">
+                        <input id="application_title" class="application_title" type="text" name="application_title" value="default" placeholder="请输入项目组名称" style="text-align: left;" disabled>
+                    </div>
+                <span class="application_title_error"></span>
+                </div>
+
+                <!-- 端口号 Start-->
+                <div class="form-group">
+                    <label class="application_title">端口号：</label>
+                    <div class="application_main clearFix">
+                        <input class="service_port" type="text" name="service_port" value="" placeholder="请输入服务的端口号" style="width: 40%;float: left;">
+                        <i style="display: inline-block;height: 100%;padding: 0px 10px;float: left;">--</i>
+                        <input class="pods_port" type="text" name="pods_port" value="" placeholder="请输入容器的端口号" style="width: 40%;float: left;">
+                    </div>
+                <span class="ports_error"></span>
+                </div>
+                <div class="login-item">
+                    <input type="submit" id="createConfirm" class="center-block" value="确认">
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+    </div>
+{% endblock %}
+
+{% block other_cluster_js %}
+
+    <script>
+
+    $('#createConfirm').click(function (e) {
+
+         e.preventDefault();
+        <!-- 镜像数据 -->
+        var $batch = $("#batch option:selected").text();
+        var $Index = $("#batch option:selected").val();
+
+{#        console.log('数据1是' + $batch, '数据2是' + $Index);#}
+
+        if ($Index == 0) {
+            $('.images_error').empty();
+            $('.images_error').html('数据不能为空');
+            return false;
+        }
+
+        <!-- 应用名称 -->
+        var $username = $('.application_name').val();
+        if ($username == '') {
+            $('.name_error').empty();
+            $('.name_error').html('数据不能为空');
+            return false;
+        }
+
+
+        <!-- 应用型号 -->
+        var $radio = $("input[name='radio_']:checked").val();
+
+        <!-- 创建数量 -->
+        var $createNum = $('.create_num').val();
+        if ($createNum < 0 || $createNum > 10) {
+            $('.num_error').empty();
+            $('.num_error').html('副本数量保持在10以内');
+            return false;
+        }
+
+        <!-- 项目组 -->
+        var $applicationTitle = $('#application_title').val();
+        var regex = /^[0-9]+$/;
+        if ($applicationTitle == '') {
+            $('.application_title_error').empty();
+            $('.application_title_error').html('请输入项目组名称');
+            return false;
+        } else if (regex.test($applicationTitle)) {
+            $('.application_title_error').empty();
+            $('.application_title_error').html('项目组名称不能为纯数字');
+        } else if (!isNaN($applicationTitle)) {
+            $('.application_title_error').empty();
+            $('.application_title_error').html('项目组名称不能为纯数字');
+        }
+
+        <!-- 端口号 -->
+        var $servicePort = $('.service_port').val();
+        var $podsPort = $('.pods_port').val();
+        if ($servicePort > 99999 || $podsPort > 99999 || $servicePort < 0 || $podsPort < 0) {
+            $('.ports_error').empty();
+            $('.ports_error').html('端口号限制在99999以内');
+        }
+
+        var json_msg = {
+            'batch' : $batch,
+            'application_name': $username,
+            'radio_': $radio,
+            'create_num': $createNum,
+            'application_title': $applicationTitle,
+            'service_port': $servicePort,
+            'pods_port': $podsPort
+        };
+
+        $.ajax({
+            url: '/jsonConfigure/' ,
+            type: 'POST',
+            data: {
+                    'batch' : $batch,
+                    'application_name': $username,
+                    'radio_': $radio,
+                    'create_num': $createNum,
+                    'application_title': $applicationTitle,
+                    'service_port': $servicePort,
+                    'pods_port': $podsPort
+                },
+            success: function (result) {
+                var obj = eval(result);
+                if ( obj['mess'] == 'ok' ){
+                    layer.msg('数据传输成功！', {time: 3000, icon: 6});
+                }
+            },
+            error: function (xhr, errmsg, err) {
+                    layer.msg('数据传输错误!', {time: 3000, icon: 5});
+            }
+        });
+
+
+    });
+
+    </script>
+
+{#    <script>#}
+{#        $('#createConfirm').on('click', function () {#}
+{##}
+{#             $('#createConfirm').click(function () {#}
+{##}
+{##}
+{#            function createConfirm() {#}
+{##}
+{#                <!-- 镜像数据 -->#}
+{#                var $batch = $("#batch option:selected").text();#}
+{#                var $Index = $("#batch option:selected").val();#}
+{#                if ($Index == 0) {#}
+{#                    $('.num_error').empty();#}
+{#                    $('.images_error').html('数据不能为空');#}
+{#                    return false;#}
+{#                }#}
+{##}
+{#                <!-- 应用名称 -->#}
+{#                var $username = $('.application_name').val();#}
+{#                if ($username == '') {#}
+{#                    $('.name_error').empty();#}
+{#                    $('.name_error').html('数据不能为空');#}
+{#                    return false;#}
+{#                }#}
+{##}
+{##}
+{#                <!-- 应用型号 -->#}
+{#                var $radio = $("input[name='radio_']:checked").val();#}
+{##}
+{#                <!-- 创建数量 -->#}
+{#                var $createNum = $('.create_num').val();#}
+{#                if ($createNum < 0 || $createNum > 10) {#}
+{#                    $('.num_error').empty();#}
+{#                    $('.num_error').html('副本数量保持在10以内');#}
+{#                    return false;#}
+{#                }#}
+{##}
+{#                <!-- 项目组 -->#}
+{#                var $applicationTitle = $('#application_title').val();#}
+{#                var regex = /^[0-9]+$/;#}
+{#                if ($applicationTitle == '') {#}
+{#                    $('.application_title_error').empty();#}
+{#                    $('.application_title_error').html('请输入项目组名称');#}
+{#                    return false;#}
+{#                } else if (regex.test($applicationTitle)) {#}
+{#                    $('.application_title_error').empty();#}
+{#                    $('.application_title_error').html('项目组名称不能为纯数字');#}
+{#                } else if (!isNaN($applicationTitle)) {#}
+{#                    $('.application_title_error').empty();#}
+{#                    $('.application_title_error').html('项目组名称不能为纯数字');#}
+{#                }#}
+{##}
+{#                <!-- 端口号 -->#}
+{#                var $servicePort = $('.service_port').val();#}
+{#                var $podsPort = $('.pods_port').val();#}
+{#                if ($servicePort > 99999 || $podsPort > 99999 || $servicePort < 0 || $podsPort < 0) {#}
+{#                    $('.ports_error').empty();#}
+{#                    $('.ports_error').html('端口号限制在99999以内');#}
+{#                }#}
+{##}
+{#                var json_msg = {#}
+{#                    'username': $username,#}
+{#                    'radio': $radio,#}
+{#                    'number': $createNum,#}
+{#                    'titles': $applicationTitle,#}
+{#                    'servicePort': $servicePort,#}
+{#                    'podsPort': $podsPort#}
+{#                };#}
+{##}
+{#                $.ajax({#}
+{#                    cache: true,#}
+{#                    type: 'POST',#}
+{#                    url: '/jsonConfigure/',#}
+{#                    dataType: 'json',#}
+{#                    success: function (data) {#}
+{#                        var obj=eval(data);#}
+{#                        console.log('数据是' + obj);#}
+{#                        layer.msg('success', {time: 3000, icon: 6});#}
+{#                        location.reload();#}
+{#                    },#}
+{#                    error: function (data) {#}
+{#                        layer.msg('error', {time: 3000, icon: 5});#}
+{#                    }#}
+{#                });#}
+{##}
+{#            }#}
+{##}
+{# });#}
+{#        })#}
+{##}
+{#    </script>#}
+
+{% endblock %}
