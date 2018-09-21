@@ -127,7 +127,6 @@ def jsonConfigure(request):
     contexts = {}
     new_dicts = {}
     yaml_files = {}
-    new_list = []
     new_ = []
 
     global k_ , v_
@@ -141,12 +140,11 @@ def jsonConfigure(request):
             service_port = request.POST.get('service_port')
             pods_port = request.POST.get('pods_port')
 
+            # 镜像地址
             application_names = '{0}:5000/{1}'.format(REGISTERY_IP_ADDR, batch)
-
             for ins in range(len(radio_)):
                 if ins == 0:
                     new_ = radio_[ins].split(' ')
-
             for ins in range(len(new_)):
                 if ins == 0:
                     k_ = 'cpu'
@@ -157,18 +155,13 @@ def jsonConfigure(request):
                     v_ = new_[1]
                     yaml_files[k_] = v_
 
-            # print '新的字典数据是{0}'.format(yaml_files)
-
-            # print '最后的地址是%s' % application_names
-
             context = { 'application_name': application_name, 'application_names': application_names, 'create_num': create_num, 'application_title': application_title, 'service_port': service_port, 'pods_port':pods_port}
 
+            #包含所有数据的字典数据
             new_dicts = dict(context.items() + yaml_files.items())
 
-            print 'context数据是{0}'.format(context)
-
             # 修改文件
-            replaces('/home/share/kubernetesWebs/utils/create_yaml.yaml', new_dicts)
+            replaces(r'/kubernetesWebs/utils/create_yaml.yaml', new_dicts)
 
             contexts = {'mess': 'ok'}
 

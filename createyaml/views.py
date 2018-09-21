@@ -65,8 +65,6 @@ def replaces(file_path, new_str):
         x2['spec']['template']['spec']['containers'][0]['ports'][0]['containerPort'] = int(new_str_['$8'].encode('utf-8'))
         x2['spec']['template']['metadata']['labels']['app'] = new_str_['$1'].encode('utf-8')
         x2['spec']['selector']['matchLabels']['app'] = new_str_['$1'].encode('utf-8')
-
-
         x2['metadata']['labels']['app'] = new_str_['$1'].encode('utf-8')
         x2['metadata']['name'] = new_str_['$1'].encode('utf-8')
         x2['metadata']['namespace'] = new_str_['$2'].encode('utf-8')
